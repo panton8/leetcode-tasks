@@ -25,3 +25,19 @@ class Solution:
             middle_len -= 1
 
         return middle
+
+    def middleNode2(self, head: Optional[ListNode]) -> Optional[ListNode]:
+        if not head or not head.next:
+            return head
+
+        fast, slow = head, head
+
+        if fast.next and fast.next.next:
+            while fast.next and fast.next.next:
+                fast = fast.next.next
+                slow = slow.next
+
+        if fast.next:
+            slow = slow.next
+
+        return slow
