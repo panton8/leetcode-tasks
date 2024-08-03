@@ -10,7 +10,8 @@ class ListNode:
 
 
 class Solution:
-    def pairSum(self, head: Optional[ListNode]) -> int:
+    # reverse 2nd part of linked list
+    def pairSum1(self, head: Optional[ListNode]) -> int:
         if not head.next.next:
             return head.val + head.next.val
 
@@ -37,6 +38,29 @@ class Solution:
 
         return max_sum
 
+    # reverse 1st part of linked list
+    def pairSum2(self, head: Optional[ListNode]) -> int:
+        if not head.next.next:
+            return head.val + head.next.val
+
+        slow, fast, prev = head, head, None
+
+        while fast and fast.next:
+            fast = fast.next.next
+            temp = slow.next
+            slow.next = prev
+            prev = slow
+            slow = temp
+
+        max_sum = 0
+
+        while prev:
+            max_sum = max(max_sum, prev.val + slow.val)
+            prev = prev.next
+            slow = slow.next
+
+        return max_sum
+
 
 def main():
     sol = Solution()
@@ -46,10 +70,20 @@ def main():
     head3 = ListNode(1, ListNode(100000))
     head4 = ListNode(1, ListNode(2, ListNode(3, ListNode(4, ListNode(5, ListNode(6, ListNode(7, ListNode(8, ListNode(9, ListNode(10))))))))))
 
-    assert sol.pairSum(head1) == 7
-    assert sol.pairSum(head2) == 6
-    assert sol.pairSum(head3) == 100001
-    assert sol.pairSum(head4) == 11
+    assert sol.pairSum1(head1) == 7
+    assert sol.pairSum1(head2) == 6
+    assert sol.pairSum1(head3) == 100001
+    assert sol.pairSum1(head4) == 11
+
+    head1 = ListNode(4, ListNode(2, ListNode(2, ListNode(3))))
+    head2 = ListNode(5, ListNode(4, ListNode(2, ListNode(1))))
+    head3 = ListNode(1, ListNode(100000))
+    head4 = ListNode(1, ListNode(2, ListNode(3, ListNode(4, ListNode(5, ListNode(6, ListNode(7, ListNode(8, ListNode(9, ListNode(10))))))))))
+
+    assert sol.pairSum2(head1) == 7
+    assert sol.pairSum2(head2) == 6
+    assert sol.pairSum2(head3) == 100001
+    assert sol.pairSum2(head4) == 11
 
 
 if __name__ == '__main__':
